@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas动画</title>
+</head>
+<body>
+  <canvas id="canvas" style="background: #5A92AF;">
+    <P>you browser not support canvas!</P>
+  </canvas>
+  <script src="../utils/utils.js"></script>
+  <script>
+    window.onload = function(){
+      function Aqu(color, num, amp) {
+        this.startPoint = [];
+        this.endPointX = [];
+        this.endPointY = [];
+        this.amp = [];
+        this.beta = 0;
+        this.color = (color === undefined) ? '#3b154e': color; // 颜色
+        this.num = (num === undefined) ? 80: num; // 数量
+      }
+      Aqu.prototype.init = function () {
+        for (var i = 0; i < this.num; i++) {
+          this.startPoint[i] = Math.random() * 20 + i * 10;
+          this.endPointX[i] = this.startPoint[i];
+          this.endPointY[i] = canvas.height / 1.5 - Math.random() * 50;
+          this.amp[i] = Math.random() * 10 + 40; // 摆动幅度
+        }
+      }
+      Aqu.prototype.draw = function (ctx) {
+        ctx.save();
+        // save()保存的只是CanvasRenderingContext2D对象的状态以及对象的所有属性，并不包括这个对象上绘制的图形。
+        ctx.lineWidth = 14;
+        ctx.lineCap = 'round';
+        ctx.globalAlpha = 0.8;
+        ctx.storkeStyle = this.color;
+        // Math.sin
+        this.beta += del * 0.0012;
+        var l = Math.sin(this.beta);
+
+        for (var i = 0; i < this.num; i++) {
+          ctx.beginPath();
+          ctx.moveTo(this.startPoint[i], canvas.height); // 移动到底部
+          // 周期性改变水草的定点位置
+          this.endPointX[i] = this.startPoint[i] + l * this.amp[i];
+          ctx.quadraticCurveTo(this.startPoint[i], canvas.height - 120, this.endPointX[i], this.endPointY[i]);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      var canvas = document.getElementById('canvas'),
+        ctx = canvas.getContext('2d');
+      canvas.width = 800;
+      canvas.height = 400;
+
+      var aqu = new Aqu();
+      aqu.init(); // 初始化
+      
+      var oldTime = new Date().getTime(),
+        del = null, newTime = null;
+      (function drawFrame() {
+        window.requestAnimationFrame(drawFrame, canvas);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        newTime = Date.now();
+        del = Date.now() - oldTime;
+        oldTime = newTime;
+
+        aqu.draw(ctx);
+      })();
+    }
+  </script>
+</body>
+</html>
