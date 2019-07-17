@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas动画序</title>
+</head>
+<body>
+  <canvas id="canvas" width='500' height="500">
+    <P>you browser not support canvas!</P>
+  </canvas>
+  <script>
+    window.onload = function(){
+      var canvas = document.getElementById('canvas'),
+        context = canvas.getContext('2d'),
+        w = window.innerWidth,
+        h = window.innerHeight;
+      // 初始化
+      var clearColor = 'rgba(0, 0, 0, .1)',
+        wordColor = '#33ff33',
+        words = "0123456789qwertyuiopasdfghjklzxcvbnm,./;'\[]QWERTYUIOP{}ASDFGHJHJKL:ZXCVBBNM<>?",
+        wordsArr = words.split(''),
+        font_size = 16,
+        colmns = w / font_size,
+        drops = [];
+
+      for (var i = 0; i < colmns; i++) {
+        drops[i] = 1;
+      }
+
+      function draw() {
+        context.save();
+        context.fillStyle = wordColor;
+        context.font = font_size + 'px Arial';
+
+        for (var i = 0; i < drops.length; i++) {
+          var text = wordsArr[Math.floor(Math.random() * wordsArr.length)];
+          context.fillText(text, i * font_size, drops[i] * font_size);
+          if (drops[i] * font_size > h && Math.random() > 0.98) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+
+        context.restore();
+      }
+
+      (function drawFrame() {
+        window.requestAnimationFrame(drawFrame, canvas);
+        // 在初始化部分，我们定义了一个变量clearColor = 'rgba(0, 0, 0, .1)',用于绘制阴影。
+        // 其原理是：每当动画绘制新的一帧，就在上面覆盖一个透明度为0.1的黑色矩形。
+        // 随着层数的叠加，文字就会被逐渐遮盖形成了我们看到的阴影。
+        context.fillStyle = clearColor;
+        context.fillRect(0, 0, w, h);
+        draw();
+      })();
+    }
+  </script>
+</body>
+</html>

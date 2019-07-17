@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas动画</title>
+</head>
+<body>
+  <canvas id="canvas" width='500' height="500">
+    <P>you browser not support canvas!</P>
+  </canvas>
+  <script src="./utils/utils.js"></script>
+  <script>
+    window.onload = function(){
+      var canvas = document.getElementById('canvas'),
+        mouse = utils.captureMouse(canvas);
+      canvas.addEventListener('mousedown', function() {
+        console.log(mouse.x, mouse.y);
+      })
+    }
+  </script>
+</body>
+</html>
