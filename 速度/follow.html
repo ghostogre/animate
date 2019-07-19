@@ -5,7 +5,7 @@
     <title>canvas动画</title>
 </head>
 <body>
-  <canvas id="canvas" width='500' height="500">
+  <canvas id="canvas" style="background: black;" width="500" height="500">
     <P>you browser not support canvas!</P>
   </canvas>
   <script src="../utils/utils.js"></script>
@@ -13,24 +13,25 @@
   <script>
     window.onload = function(){
       var canvas = document.getElementById('canvas'),
-        context = canvas.getContext('2d'),
-        centerX = canvas.width / 2,
-        centerY = canvas.height / 2;
-      // 传入canvas, 获取鼠标在canvas上的坐标
+        context = canvas.getContext('2d');
       var mouse = utils.captureMouse(canvas);
-      // 新建一个Arrow对象
+
       var arrow = new Arrow();
-      // 将arrow的坐标设置为canvas的中心
-      arrow.x = centerX;
-      arrow.y = centerY;
+      arrow.x = canvas.width / 2;
+      arrow.y = canvas.height / 2;
+
+      var angle = 0, speed = 2;
       (function drawFrame() {
         window.requestAnimationFrame(drawFrame, canvas);
         context.clearRect(0, 0, canvas.width, canvas.height);
-        // 获取dx,dy
-        var dx = mouse.x - arrow.x,
-          dy = mouse.y - arrow.y;
-        // 设置旋转角度
-        arrow.rotation = Math.atan2(dy, dx);
+        var dx = mouse.x - arrow.x;
+        var dy = mouse.y - arrow.y;
+        angle = Math.atan2(dy, dx);
+        arrow.rotation = angle;
+        var vx = Math.cos(angle) * speed;
+        var vy = Math.sin(angle) * speed;
+        arrow.x += vx;
+        arrow.y += vy;
         arrow.draw(context);
       })();
     }

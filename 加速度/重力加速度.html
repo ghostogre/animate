@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas动画</title>
+</head>
+<body>
+  <canvas id="canvas" style="background: black;" width="500" height="500">
+    <P>you browser not support canvas!</P>
+  </canvas>
+  <script src="../utils/utils.js"></script>
+  <script src="../utils/ball.js"></script>
+  <script>
+    window.onload = function(){
+      var canvas = document.getElementById('canvas'),
+        context = canvas.getContext('2d');
+      var ball = new Ball(20, 'red');
+      ball.x = canvas.width / 2;
+      ball.y = canvas.height / 2 - 200;
+      
+      var vy = 0, gravity = 0.2, bounce = -0.8; // 速度，重力加速度，反弹系数
+
+      function checkGround(ball) {
+        if (ball.y + ball.radius > canvas.height) {
+          ball.y = canvas.height - ball.radius;
+          vy *= bounce;
+        }
+      } // 碰撞检测
+      
+      (function drawFrame() {
+        window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        //加速度分解
+        vy += gravity;
+        ball.y += vy;
+
+        checkGround(ball);
+
+        ball.draw(context);
+      })();
+    }
+  </script>
+</body>
+</html>

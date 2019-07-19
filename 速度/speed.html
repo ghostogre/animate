@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas动画</title>
+</head>
+<body>
+  <canvas id="canvas" style="background: black;" width="500" height="500">
+    <P>you browser not support canvas!</P>
+  </canvas>
+  <script src="../utils/utils.js"></script>
+  <script src="../utils/ball.js"></script>
+  <script>
+    window.onload = function(){
+      var canvas = document.getElementById('canvas'),
+        context = canvas.getContext('2d');
+      var ball = new Ball();
+      ball.x = canvas.width / 4;
+      ball.y = canvas.height / 4;
+      var vx = 1; // 速度
+      var vy = 1;
+      (function drawFrame() {
+        window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        ball.x += vx;
+        ball.y += vy;
+        ball.draw(context);
+      })();
+    }
+  </script>
+</body>
+</html>
